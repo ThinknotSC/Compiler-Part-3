@@ -23,20 +23,7 @@ map<string,int> precMap;
 
 
 // Runtime Global Methods
-void dump() {
-	cout << "Symbol table:" << endl;
-	for (const auto& [variable, type] : symboltable) {
-		cout << variable << " : " << type << endl;
-	}
-	cout << "Symbol values:" << endl;
-	for (const auto& [variable, type] : symbolvalues) {
-		cout << variable << " : " << type << endl;
-	}
-
-	for (int x = 0; x < insttable.size(); x++) {
-		cout << x << ": " << insttable[x] << endl;
-	}
-}				// prints vartable, instable, symboltable
+				// prints vartable, instable, symboltable
 
 bool isOperator(string lex) {
     return lex == "+" ||
@@ -792,10 +779,25 @@ public:
 	}
 };
 
+void dump() {
+	cout << "Symbol table:" << endl;
+	for (const auto& [variable, type] : symboltable) {
+		cout << variable << " : " << type << endl;
+	}
+	cout << "Symbol values:" << endl;
+	for (const auto& [variable, type] : symbolvalues) {
+		cout << variable << " : " << type << endl;
+	}
+
+	for (int x = 0; x < insttable.size(); x++) {
+		cout << x << ": " << insttable[x]-> toString() << endl;
+	}
+}
+
 
 int main(){
-	ifstream source("test3B_data.txt");
-	ifstream symbols("test3B_vars.txt");
+	ifstream source("test1A_data.txt");
+	ifstream symbols("test1A_vars.txt");
 	if (!source || !symbols) exit(-1);
 	Compiler c(source, symbols);
 	c.compile();
