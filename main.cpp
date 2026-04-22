@@ -659,7 +659,6 @@ private:
 	}
 
 	void buildIntPostFix(Expr*& ptr) {
-	    cout << "here" << endl;
         // creates a new Integer Postfix Expression and points the argument ptr to it
         ptr = new IntPostFixExpr();
 
