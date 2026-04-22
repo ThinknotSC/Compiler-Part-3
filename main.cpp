@@ -81,26 +81,16 @@ private:
     vector<string> expr;
     vector<string> exprtoks;
 
-    bool applyRelOper(string a, string b, string oper) {
-        if (oper == "<") return a < b;
-        else if (oper == ">") return a > b;
-        else if (oper == "<=") return a <= b;
-        else if (oper == ">=") return a >= b;
-        else if (oper == "==") return a == b;
-        else if (oper == "!=") return a != b;
-        else {
-            cout << "In StringPostFixExpr::applyRelOper, unexpected oper" << endl;
-            exit(-1);
-        }
-    }
-
-    bool applyLogicOper(bool a, bool b, string oper) {
-        if (oper == "and") return a && b;
-        else if (oper == "or") return a || b;
-        else {
-            cout << "In StringPostFixExpr::applyLogicOper, unexpected oper" << endl;
-            exit(-1);
-        }
+    string* applyOper(string* a, string* b, string oper) {
+        if (oper == "+") return new string(*a + *b);
+        else if (oper == "and") return (a && b) ? new string() : nullptr;
+        else if (oper == "or") return (a || b) ? new string() : nullptr;
+        else if (oper == "<") return (*a < *b) ? new string() : nullptr;
+        else if (oper == "<=") return (*a <= *b) ? new string() : nullptr;
+        else if (oper == ">") return (*a > *b) ? new string() : nullptr;
+        else if (oper == ">=") return (*a >= *b) ? new string() : nullptr;
+        else if (oper == "==") return (*a == *b) ? new string() : nullptr;
+        else if (oper == "!=") return (*a != *b) ? new string() : nullptr;
     }
 
 public:
@@ -113,49 +103,49 @@ public:
         exprtoks.push_back(tok);
     }
 
-	string* eval() {
-    	vector<string>::iterator expritr = expr.begin();
-    	vector<string>::iterator tokitr = exprtoks.begin();
-    	stack<string*> oprandStk;
+    string* eval() {
+        vector<string>::iterator expritr = expr.begin();
+        vector<string>::iterator tokitr = exprtoks.begin();
+        stack<string*> oprandStk;
 
-    	string* a;
-    	string* b;
-    	while (tokitr != exprtoks.end()) {
-    		if (*tokitr == "t_text") oprandStk.push(new string(*expritr));
-    		else if (*tokitr == "t_id") oprandStk.push(new string(symbolvalues[*expritr]));
-    		else {
-    			b = oprandStk.top(); oprandStk.pop();
-    			a = oprandStk.top(); oprandStk.pop();
-    			oprandStk.push(applyOper(a, b, *expritr));
-    			delete b;
-    			delete a;
-    		}
-    		expritr++; tokitr++;
-    	}
-    	return oprandStk.top();
+        string* a;
+        string* b;
+        while (tokitr != exprtoks.end()) {
+            if (*tokitr == "t_text") oprandStk.push(new string(*expritr));
+            else if (*tokitr == "t_id") oprandStk.push(new string(symbolvalues[*expritr]));
+            else {
+                b = oprandStk.top(); oprandStk.pop();
+                a = oprandStk.top(); oprandStk.pop();
+                oprandStk.push(applyOper(a, b, *expritr));
+                delete b;
+                delete a;
+            }
+            expritr++; tokitr++;
+        }
+        return oprandStk.top();
     }
 
-	string toString() {
-    	string res = "String Postfix Expression\n";
+    string toString() {
+        string res = "String Postfix Expression\n";
 
-    	res += "Expression Terms Vector:\n";
-    	for (int i = 0; i < expr.size(); i++) {
-    		res += expr[i];
-    		res += "\n";
-    	}
+        res += "Expression Terms Vector:\n";
+        for (int i = 0; i < expr.size(); i++) {
+            res += expr[i];
+            res += "\n";
+        }
 
-    	res += "Expression Tokens Vector:\n";
-    	for (int i = 0; i < exprtoks.size(); i++) {
-    		res += exprtoks[i];
-    		res += "\n";
-    	}
+        res += "Expression Tokens Vector:\n";
+        for (int i = 0; i < exprtoks.size(); i++) {
+            res += exprtoks[i];
+            res += "\n";
+        }
 
-    	res += "Evaluation Result:\n";
-    	string* val = eval();
-    	res += *val;
-    	delete val;
+        res += "Evaluation Result:\n";
+        string* val = eval();
+        res += *val;
+        delete val;
 
-    	return res;
+        return res;
     }
 };
 
