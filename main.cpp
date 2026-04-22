@@ -772,7 +772,7 @@ void dump() {
 	for (const auto& [variable, type] : symbolvalues) {
 		cout << variable << " : " << type << endl;
 	}
-
+	cout << "Instruction Table:" << endl;
 	for (int x = 0; x < insttable.size(); x++) {
 		cout << x << ": " << insttable[x]-> toString() << endl;
 	}
