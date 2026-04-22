@@ -507,10 +507,19 @@ public:
 
 class Compiler{
 private:
-	void buildStmt() {
+		void buildStmt() {
 		if (*tokitr == "t_if") buildIf();
 		else if (*tokitr == "t_while") buildWhile();
-		else if (*tokitr == "t_id") buildAssign();
+		else if (*tokitr == "t_id") {
+			tokitr++; lexitr++;
+			if (*tokitr == "s_assign") {
+				tokitr--; lexitr--;
+				buildAssign();
+			}
+			else {
+				tokitr--; lexitr--;
+			}
+		}
 		else if (*tokitr == "t_input") buildInput();
 		else if (*tokitr == "t_output") buildOutput();
 	}
