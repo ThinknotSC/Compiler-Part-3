@@ -1,0 +1,11 @@
+t_var var
+t_string string
+t_id name
+s_semi ;
+t_main main
+t_output output
+s_lparen (
+t_id name
+s_rparen )
+s_semi ;
+t_end end
