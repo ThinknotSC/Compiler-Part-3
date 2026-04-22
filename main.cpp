@@ -23,23 +23,9 @@ map<string,int> precMap;
 
 
 // Runtime Global Methods
-				// prints vartable, instable, symboltable
+void dump(); // prints vartable, instable, symboltable
 
-bool isOperator(string lex) {
-    return lex == "+" ||
-            lex == "*" ||
-            lex == "-" ||
-            lex == "/" ||
-            lex == "%" ||
-            lex == "and" ||
-            lex == "or" ||
-            lex == "<" ||
-            lex == "<=" ||
-            lex == ">" ||
-            lex == ">=" ||
-            lex == "==" ||
-            lex == "!=";
-}
+bool isOperator(string lex);
 
 // Classes Stmt and Expr
 // You are allowed to add methods if needed. You should NOT need to add member variables.
@@ -178,7 +164,7 @@ public:
 
     int eval() {return value;}
 
-    string toString() {return "Integer Constant Expression: " + value;}
+    string toString() {return "Integer Constant Expression: " + to_string(value);}
 };
 
 class IntIDExpr : public IntExpr {
@@ -494,7 +480,7 @@ public:
 
 class Compiler{
 private:
-		void buildStmt() {
+	void buildStmt() {
 		if (*tokitr == "t_if") buildIf();
 		else if (*tokitr == "t_while") buildWhile();
 		else if (*tokitr == "t_id") {
@@ -503,12 +489,12 @@ private:
 				tokitr--; lexitr--;
 				buildAssign();
 			}
-			else {
-				tokitr--; lexitr--;
-			}
 		}
 		else if (*tokitr == "t_input") buildInput();
 		else if (*tokitr == "t_output") buildOutput();
+		else {
+            tokitr++; lexitr++;
+		}
 	}
 
 	void buildIf() {
@@ -580,7 +566,6 @@ private:
 	}
 
 	void buildOutput() {
-		cout << "building output" << endl;
 		tokitr++; lexitr++; // move past t_output
 		tokitr++; lexitr++; // move past s_lparen
 		if (*tokitr == "t_text") {
@@ -761,15 +746,14 @@ public:
 	bool compile() {
 		while (tokitr != tokens.end()) {
 			buildStmt();
-			tokitr++; lexitr++;
 		}
-		cout << "compile method done" << endl;
 		return true;
 	}
 
 	// The run method will execute the code in the instruction
 	// table.
 	void run() {
+	    pc = 0;
 		while (pc < insttable.size()) {
 			insttable[pc]->execute();
 		}
@@ -794,11 +778,29 @@ void dump() {
 	}
 }
 
+bool isOperator(string lex) {
+    return lex == "+" ||
+            lex == "*" ||
+            lex == "-" ||
+            lex == "/" ||
+            lex == "%" ||
+            lex == "and" ||
+            lex == "or" ||
+            lex == "<" ||
+            lex == "<=" ||
+            lex == ">" ||
+            lex == ">=" ||
+            lex == "==" ||
+            lex == "!=";
+}
 
 int main(){
-	ifstream source("test1A_data.txt");
-	ifstream symbols("test1A_vars.txt");
-	if (!source || !symbols) exit(-1);
+	ifstream source("data.txt");
+	ifstream symbols("symbols.txt");
+	if (!source || !symbols) {
+        cout << "One or more files not found" << endl;
+        exit(-1);
+	}
 	Compiler c(source, symbols);
 	c.compile();
 	// might want to call dump to check if everything built correctly
