@@ -561,7 +561,7 @@ private:
 	}
 
 	void buildAssign() {
-		string var = *tokitr;
+		string var = *lexitr;
 		tokitr++; lexitr++; // move past var
 		tokitr++; lexitr++; // move past =
 		Expr* expr = buildExpr();
