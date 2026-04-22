@@ -595,7 +595,7 @@ private:
                 lexitr--;
 
                 if (isOp) {
-                    StringPostFixExpr(ex_ptr);
+                    buildStringPostFix(ex_ptr);
                 }
                 else {
                     if (*tokitr == "t_text") ex_ptr = new StringConstExpr(*lexitr);
@@ -610,7 +610,7 @@ private:
                 lexitr--;
 
                 if (isOp) {
-                    IntPostFixExpr(ex_ptr);
+                    buildIntPostFix(ex_ptr);
                 }
                 else {
                     if (*tokitr == "t_number") ex_ptr = new IntConstExpr(stoi(*lexitr));
@@ -627,7 +627,7 @@ private:
         return ex_ptr;
 	}
 
-	void buildStringPostFix(StringPostFixExpr*& ptr) {
+	void buildStringPostFix(Expr*& ptr) {
         // creates a new String Postfix Expression and points the argument ptr to it
         ptr = new StringPostFixExpr();
 
@@ -640,12 +640,12 @@ private:
         while (isId || isText || isOper) {
             if (isOper) {
                 while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
-                    ptr->add(tokStk.top(), operStk.top());
+                    dynamic_cast<StringPostFixExpr*>(ptr)->add(tokStk.top(), operStk.top());
                     tokStk.pop(); operStk.pop();
                 }
                 tokStk.push(*tokitr); operStk.push(*lexitr);
             }
-            else ptr->add(*tokitr, *lexitr);
+            else dynamic_cast<StringPostFixExpr*>(ptr)->add(*tokitr, *lexitr);
 
             tokitr++; lexitr++;
             isId = *tokitr == "t_id";
@@ -653,12 +653,13 @@ private:
             isOper = isOperator(*lexitr);
         }
         while (operStk.size() > 0) {
-            ptr->add(tokStk.top(), operStk.top());
+            dynamic_cast<StringPostFixExpr*>(ptr)->add(tokStk.top(), operStk.top());
             tokStk.pop(); operStk.pop();
         }
 	}
 
-	void buildIntPostFix(IntPostFixExpr*& ptr) {
+	void buildIntPostFix(Expr*& ptr) {
+	    cout << "here" << endl;
         // creates a new Integer Postfix Expression and points the argument ptr to it
         ptr = new IntPostFixExpr();
 
@@ -670,11 +671,11 @@ private:
         while (isId || isNumber || isOper) {
             if (isOper) {
                 while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
-                    ptr->add(operStk.top()); operStk.pop();
+                    dynamic_cast<IntPostFixExpr*>(ptr)->add(operStk.top()); operStk.pop();
                 }
                 operStk.push(*lexitr);
             }
-            else ptr->add(*lexitr);
+            else dynamic_cast<IntPostFixExpr*>(ptr)->add(*lexitr);
 
             tokitr++; lexitr++;
             isId = *tokitr == "t_id";
@@ -682,7 +683,7 @@ private:
             isOper = isOperator(*lexitr);
         }
         while (operStk.size() > 0) {
-            ptr->add(operStk.top()); operStk.pop();
+            dynamic_cast<IntPostFixExpr*>(ptr)->add(operStk.top()); operStk.pop();
         }
 	}
 
@@ -772,7 +773,7 @@ void dump() {
 	for (const auto& [variable, type] : symbolvalues) {
 		cout << variable << " : " << type << endl;
 	}
-	cout << "Instruction Table:" << endl;
+    cout << "Instruction Table:" << endl;
 	for (int x = 0; x < insttable.size(); x++) {
 		cout << x << ": " << insttable[x]-> toString() << endl;
 	}
@@ -804,7 +805,7 @@ int main(){
 	Compiler c(source, symbols);
 	c.compile();
 	// might want to call dump to check if everything built correctly
-	dump();
+	//dump();
 	c.run();
 	return 0;
 }
