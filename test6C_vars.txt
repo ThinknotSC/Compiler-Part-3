@@ -1,0 +1,3 @@
+x t_integer
+y t_integer
+z t_integer

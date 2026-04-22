@@ -794,8 +794,8 @@ public:
 
 
 int main(){
-	ifstream source("test1A_data.txt");
-	ifstream symbols("test1A_vars.txt");
+	ifstream source("test3B_data.txt");
+	ifstream symbols("test3B_vars.txt");
 	if (!source || !symbols) exit(-1);
 	Compiler c(source, symbols);
 	c.compile();

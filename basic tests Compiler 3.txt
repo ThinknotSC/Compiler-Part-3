@@ -1,0 +1,200 @@
+basic tests:
+1- int assignment and output
+ 1.1) Test 1A - True
+	Declare integer x
+	Assign x = 5
+	Output x
+	Expected output: 5
+
+ 1.2) Test 1B- False
+	Declare integer x
+	Output x before assigning a value
+	Expected output: 0
+
+2- string assignment and output
+ 2.1) Test 2A - True
+	Declare string name
+	Assign name = "hello"
+	Output name
+	Expected output: hello
+ 2.2) Test 2B- False
+	Declare string name
+	Output name before assigning it a value
+	Expected output: (empty string, nothing prints)
+
+3- multiple int assignment
+ 3.1) Test 3A- True
+	Declare integer x, y
+	Assign x = 5
+	Assign y = 10
+	Output x
+	Output y
+	Expected output: 5  10
+ 3.2) Test 3B- False
+	Declare integer x, y
+	Assign x = 5
+	Output y before assigning a value
+	Expected output: 5   0
+
+4- int arithmetic + - * %
+ 4.1) Test 4A- True
+Declare integer x
+	Assign x = 5 + 3, output x, Expected: 8
+	Assign x = 5 - 3, output x, Expected: 2
+	Assign x = 5 * 3, output x, Expected: 15
+	Assign x = 6 / 3, output x, Expected: 2
+	Assign x = 5 % 3, output x, Expected: 2
+ 4.2) Test 4B- False
+	Declare integer x
+	Assign x = 5 / 0
+	Output x	
+	Expected output: error or crash
+ 4.3) Test 4C- False
+	Declare integer x
+	Assign x = 5 % 0
+	Output x
+	Expected output: error or crash
+5- multiple operators
+ 5.1) Test 5A- True
+	Declare integer x
+	Assign x = 5 + 3 - 2,  output x, Expected: 6
+	Assign x = 2 * 3 + 4,  output x, Expected: 10
+	Assign x = 10 - 2 * 3, output x, Expected: 4  ← * before -
+	Assign x = 10 / 2 + 3, output x, Expected: 8  ← / before +
+	Assign x = 10 % 3 + 1, output x, Expected: 2  ← % before +
+
+6- if statements with nested if and else
+ 6.1) Test 6A- True(simple if)
+	Declare integer x, y
+	Assign x = 5
+	Assign y = 10
+	If (x < y) then
+	    Output x
+	End if
+	Expected output: 5
+ 6.2) Test 6B- True(with else, false first, takes else path)
+	Declare integer x, y
+	Assign x = 10
+	Assign y = 5
+	If (x < y) then
+	    Output x
+	Else
+	    Output y
+	End if
+	Expected output: 5
+ 6.3) Test 6C- True(nested ifs)
+	Declare integer x, y, z
+	Assign x = 5
+	Assign y = 10
+	Assign z = 3
+	If (x < y) then
+	    If (z < y) then
+	        Output z
+	    End if
+	End if
+	Expected output: 3
+
+7- while loops
+ 7.1) Test 7A- (true, multiple runs)
+	Declare integer x
+	Assign x = 0
+	While (x < 5) loop
+	    Output x
+	    Assign x = x + 1
+	End loop
+	Expected output: 0
+	                 1
+	                 2
+	                 3
+	                 4
+ 7.2) Test 7B- True(loop does not run, condition false from start)
+	Declare integer x
+	Assign x = 10
+	While (x < 5) loop
+	    Output x
+	    Assign x = x + 1
+	End loop
+	Expected output: nothing
+7.3) Test 7C- true (nested while)
+	Declare integer x, y
+	Assign x = 0
+	While (x < 3) loop
+	    Assign y = 0
+	    While (y < 3) loop
+	        Output y
+	        Assign y = y + 1
+	    End loop
+	    Assign x = x + 1
+	End loop
+	Expected output: 0 1 2 0 1 2 0 1 2
+7.4) Test 7D- True (infinite loop)
+	Declare integer x
+	Assign x = 0
+	While (x < 5) loop
+	    Output x
+	End loop
+	Expected output: 0 0....
+
+8- logical errors
+
+????????????????????????????????????????????????????????????
+TODO FINISH THESE- already in claude, just paste.
+9- concatenation 
+ 9.1) Test 9A- true 
+	Declare string name
+	Assign name = "hello" + "world"
+	Output name
+	Expected output: helloworld
+ 9.2) Test 9B- True (using variable)
+	Declare string first, last
+	Assign first = "hello"
+	Assign last = "world"
+	Assign first = first + last
+	Output first
+	Expected output: helloworld
+
+10- relational operators with strings 
+ 10.1) Test 10A- true
+	Declare string name
+	Assign name = "hello"
+	If (name == "hello") then output name, Expected: hello
+	If (name != "world") then output name, Expected: hello
+	If (name < "world") then output name, Expected: hello  ← alphabetical comparison
+	If (name <= "hello") then output name, Expected: hello
+	If (name > "apple") then output name, Expected: hello  ← alphabetical comparison
+	If (name >= "hello") then output name, Expected: hello
+ 10.2) String 'and' operator with strings
+	Declare string first, last
+	Assign first = "hello"
+	Assign last = "world"
+	If (first == "hello" and last == "world") then
+	    Output first
+	    Output last
+	Expected output: hello
+	                 world
+ 10.3) String 'or' operator with strings
+	Declare string name
+	Assign name = "hello"
+	If (name == "world" or name == "hello") then
+	    Output name
+	Expected output: hello
+
+ 10.4) and/or combined
+	Declare integer x
+	Declare string name
+	Assign x = 5
+	Assign name = "hello"
+	If (x < 10 and name == "hello") then
+	    Output x
+	    Output name
+	Expected output: 5
+	                 hello
+11- Edge cases
+ 11.1) Test 11A- and with true and false (should be false?)
+	Declare integer x
+	Assign x = 5
+	If (x == 5 and x != 5) then
+	    Output x
+	End if
+	Expected output: nothing ← and requires BOTH true
+ 
