@@ -23,7 +23,20 @@ map<string,int> precMap;
 
 
 // Runtime Global Methods
-void dump(); 				// prints vartable, instable, symboltable
+void dump() {
+	cout << "Symbol table:" << endl;
+	for (const auto& [variable, type] : symboltable) {
+		cout << variable << " : " << type << endl;
+	}
+	cout << "Symbol values:" << endl;
+	for (const auto& [variable, type] : symbolvalues) {
+		cout << variable << " : " << type << endl;
+	}
+
+	for (int x = 0; x < insttable.size(); x++) {
+		cout << x << ": " << insttable[x] << endl;
+	}
+}				// prints vartable, instable, symboltable
 
 
 // Classes Stmt and Expr
@@ -91,6 +104,7 @@ private:
         else if (oper == ">=") return (*a >= *b) ? new string() : nullptr;
         else if (oper == "==") return (*a == *b) ? new string() : nullptr;
         else if (oper == "!=") return (*a != *b) ? new string() : nullptr;
+    	return nullptr;
     }
 
 public:
@@ -425,11 +439,7 @@ public:
 		}
 		StringExpr* s_expr = dynamic_cast<StringExpr*>(_p_expr);
 		if (s_expr != nullptr) {
-			if (s_expr->eval() == nullptr) {
-				pc = _elsetarget;
-			} else {
-				pc++;
-			}
+			pc++;
 		}
 		// Throw error - Invalid Expression
 	}
@@ -462,13 +472,17 @@ public:
 				pc++;
 			}
 		}
-		StringPostFixExpr* s_expr = dynamic_cast<StringPostFixExpr*>(_p_expr);
-		if (s_expr != nullptr) {
-			if (s_expr->eval() == nullptr) {
+		StringPostFixExpr* s_pfexpr = dynamic_cast<StringPostFixExpr*>(_p_expr);
+		if (s_pfexpr != nullptr) {
+			if (s_pfexpr->eval() == nullptr) {
 				pc = _elsetarget;
 			} else {
 				pc++;
 			}
+		}
+		StringExpr* s_expr = dynamic_cast<StringExpr*>(_p_expr);
+		if (s_expr != nullptr) {
+			pc++;
 		}
 	}
 };
@@ -478,9 +492,9 @@ private:
 	int _target;
 public:
 	GoToStmt(int target) : Stmt("t_goto") {
-		target = _target;
+		_target = target;
 	}
-	~GoToStmt();
+	~GoToStmt() {}
 	void setTarget(int target) {
 		_target = target;
 	}
@@ -589,7 +603,124 @@ private:
 		tokitr++; lexitr++; // move past s_rparen
 	}
 
-    Expr* buildExpr();
+	bool isOperator(string lex) {
+		return lex == "+" ||
+				lex == "*" ||
+				lex == "-" ||
+				lex == "/" ||
+				lex == "%" ||
+				lex == "and" ||
+				lex == "or" ||
+				lex == "<" ||
+				lex == "<=" ||
+				lex == ">" ||
+				lex == ">=" ||
+				lex == "==" ||
+				lex == "!=";
+	}
+
+    Expr* buildExpr() {
+        Expr* ex_ptr = nullptr;
+
+        bool isOp;
+
+        if (tokitr != tokens.end()) {
+            if (*tokitr == "t_text" || (*tokitr == "t_id" && symboltable[*lexitr] == "t_string")) {
+                lexitr++;
+                isOp = isOperator(*lexitr);
+                lexitr--;
+
+                if (isOp) {
+                    StringPostFixExpr(ex_ptr);
+                }
+                else {
+                    if (*tokitr == "t_text") ex_ptr = new StringConstExpr(*lexitr);
+                    else ex_ptr = new StringIDExpr(*lexitr);
+                    tokitr++; lexitr++;
+                }
+            }
+
+            else if (*tokitr == "t_number" || (*tokitr == "t_id" && symboltable[*lexitr] == "t_integer")) {
+                lexitr++;
+                isOp = isOperator(*lexitr);
+                lexitr--;
+
+                if (isOp) {
+                    IntPostFixExpr(ex_ptr);
+                }
+                else {
+                    if (*tokitr == "t_number") ex_ptr = new IntConstExpr(stoi(*lexitr));
+                    else ex_ptr = new IntIDExpr(*lexitr);
+                    tokitr++; lexitr++;
+                }
+            }
+        }
+
+        if (ex_ptr == nullptr) {
+            cout << "error in buildExpr: token didn't match any potential expressions" << endl;
+            exit(-1);
+        }
+        return ex_ptr;
+	}
+
+	void buildStringPostFix(StringPostFixExpr*& ptr) {
+        // creates a new String Postfix Expression and points the argument ptr to it
+        ptr = new StringPostFixExpr();
+
+        stack<string> operStk;
+        stack<string> tokStk;
+
+        bool isId = *tokitr == "t_id";
+        bool isText = *tokitr == "t_text";
+        bool isOper = false;
+        while (isId || isText || isOper) {
+            if (isOper) {
+                while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
+                    ptr->add(tokStk.top(), operStk.top());
+                    tokStk.pop(); operStk.pop();
+                }
+                tokStk.push(*tokitr); operStk.push(*lexitr);
+            }
+            else ptr->add(*tokitr, *lexitr);
+
+            tokitr++; lexitr++;
+            isId = *tokitr == "t_id";
+            isText = *tokitr == "t_text";
+            isOper = isOperator(*lexitr);
+        }
+        while (operStk.size() > 0) {
+            ptr->add(tokStk.top(), operStk.top());
+            tokStk.pop(); operStk.pop();
+        }
+	}
+
+	void buildIntPostFix(IntPostFixExpr*& ptr) {
+        // creates a new Integer Postfix Expression and points the argument ptr to it
+        ptr = new IntPostFixExpr();
+
+        stack<string> operStk;
+
+        bool isId = *tokitr == "t_id";
+        bool isNumber = *tokitr == "t_number";
+        bool isOper = false;
+        while (isId || isNumber || isOper) {
+            if (isOper) {
+                while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
+                    ptr->add(operStk.top()); operStk.pop();
+                }
+                operStk.push(*lexitr);
+            }
+            else ptr->add(*lexitr);
+
+            tokitr++; lexitr++;
+            isId = *tokitr == "t_id";
+            isNumber = *tokitr == "t_number";
+            isOper = isOperator(*lexitr);
+        }
+        while (operStk.size() > 0) {
+            ptr->add(operStk.top()); operStk.pop();
+        }
+	}
 
 	// headers for populate methods may not change
 	void populateTokenLexemes(istream& infile) {
@@ -663,6 +794,9 @@ public:
 		while (pc < insttable.size()) {
 			insttable[pc]->execute();
 		}
+		for (int i = 0; i < insttable.size(); i++) {
+			delete insttable[i];
+		}
 	}
 };
 
@@ -674,7 +808,7 @@ int main(){
 	Compiler c(source, symbols);
 	c.compile();
 	// might want to call dump to check if everything built correctly
-	// dump();
+	dump();
 	c.run();
 	return 0;
 }
