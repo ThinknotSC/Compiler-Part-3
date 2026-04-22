@@ -38,6 +38,21 @@ void dump() {
 	}
 }				// prints vartable, instable, symboltable
 
+bool isOperator(string lex) {
+    return lex == "+" ||
+            lex == "*" ||
+            lex == "-" ||
+            lex == "/" ||
+            lex == "%" ||
+            lex == "and" ||
+            lex == "or" ||
+            lex == "<" ||
+            lex == "<=" ||
+            lex == ">" ||
+            lex == ">=" ||
+            lex == "==" ||
+            lex == "!=";
+}
 
 // Classes Stmt and Expr
 // You are allowed to add methods if needed. You should NOT need to add member variables.
@@ -199,22 +214,6 @@ class IntPostFixExpr : public IntExpr {
 private:
     vector<string> expr;
 
-    bool isOperator(string lex) {
-        return lex == "+" ||
-                lex == "*" ||
-                lex == "-" ||
-                lex == "/" ||
-                lex == "%" ||
-                lex == "and" ||
-                lex == "or" ||
-                lex == "<" ||
-                lex == "<=" ||
-                lex == ">" ||
-                lex == ">=" ||
-                lex == "==" ||
-                lex == "!=";
-    }
-
     int applyOperator(int a, int b, string oper) {
         if (oper == "+") return a + b;
         else if (oper == "*") return a * b;
@@ -235,6 +234,13 @@ private:
         }
     }
 
+	bool isNumber(string lex) {
+        for (int i = 0; i < lex.length(); i++) {
+            if (!isdigit(lex[i])) return false;
+        }
+        return true;
+    }
+
 public:
     IntPostFixExpr() {}
 
@@ -242,13 +248,6 @@ public:
 
     void add(string lex) {
         expr.push_back(lex);
-    }
-
-    bool isNumber(string lex) {
-        for (int i = 0; i < lex.length(); i++) {
-            if (!isdigit(lex[i])) return false;
-        }
-        return true;
     }
 
     int eval() {
@@ -601,22 +600,6 @@ private:
 		}
 		tokitr++; lexitr++; // move past output var
 		tokitr++; lexitr++; // move past s_rparen
-	}
-
-	bool isOperator(string lex) {
-		return lex == "+" ||
-				lex == "*" ||
-				lex == "-" ||
-				lex == "/" ||
-				lex == "%" ||
-				lex == "and" ||
-				lex == "or" ||
-				lex == "<" ||
-				lex == "<=" ||
-				lex == ">" ||
-				lex == ">=" ||
-				lex == "==" ||
-				lex == "!=";
 	}
 
     Expr* buildExpr() {
