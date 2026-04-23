@@ -639,7 +639,7 @@ private:
         bool isOper = false;
         while (isId || isText || isOper) {
             if (isOper) {
-                while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
+                while (operStk.size() > 0 && precMap[*lexitr] >= precMap[operStk.top()]) {
                     dynamic_cast<StringPostFixExpr*>(ptr)->add(tokStk.top(), operStk.top());
                     tokStk.pop(); operStk.pop();
                 }
@@ -669,7 +669,7 @@ private:
         bool isOper = false;
         while (isId || isNumber || isOper) {
             if (isOper) {
-                while (operStk.size() > 0 && precMap[*lexitr] <= precMap[operStk.top()]) {
+                while (operStk.size() > 0 && precMap[*lexitr] >= precMap[operStk.top()]) {
                     dynamic_cast<IntPostFixExpr*>(ptr)->add(operStk.top()); operStk.pop();
                 }
                 operStk.push(*lexitr);
