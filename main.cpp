@@ -287,20 +287,28 @@ public:
 		}
 	}
 	string toString() {
-		return Stmt::toString() + " var " + _var + " expression: " + _p_expr->toString();
+		return Stmt::toString() + " var: " + _var + " expression: " + _p_expr->toString();
 	}
 	void execute() {
 		if (symboltable[_var] == "t_string") {
 			StringExpr* s_expr = dynamic_cast<StringExpr*>(_p_expr);
-			if (s_expr != nullptr) symbolvalues[_var] =s_expr->eval();
-			pc++;
+			if (s_expr != nullptr) {
+				symbolvalues[_var] = s_expr->eval();
+				pc++;
+			}
+			StringPostFixExpr* spfexpr = dynamic_cast<StringPostFixExpr*>(_p_expr);
+			if (spfexpr != nullptr) {
+				symbolvalues[_var] = *spfexpr->eval();
+				pc++;
+			}
 		}
 		if (symboltable[_var] == "t_integer") {
 			IntExpr* i_expr = dynamic_cast<IntExpr*>(_p_expr);
-			if (i_expr != nullptr) symbolvalues[_var] = to_string(i_expr->eval());
-			pc++;
+			if (i_expr != nullptr) {
+				symbolvalues[_var] = to_string(i_expr->eval());
+				pc++;
+			}
 		}
-		// Throw error - Invalid Expression
 	}
 };
 
@@ -413,7 +421,6 @@ public:
 		if (s_expr != nullptr) {
 			pc++;
 		}
-		// Throw error - Invalid Expression
 	}
 };
 

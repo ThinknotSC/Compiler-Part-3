@@ -17,7 +17,7 @@ s_semi ;
 t_if if
 s_lparen (
 t_id x
-s_lt 
+s_lt <
 t_number 10
 t_and and
 t_id name
