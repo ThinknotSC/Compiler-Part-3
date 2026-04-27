@@ -22,7 +22,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_end end

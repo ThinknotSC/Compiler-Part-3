@@ -22,14 +22,14 @@ s_semi ;
 t_if if
 s_lparen (
 t_id x
-s_lt 
+s_lt <
 t_id y
 s_rparen )
 t_then then
 t_if if
 s_lparen (
 t_id z
-s_lt 
+s_lt <
 t_id y
 s_rparen )
 t_then then
@@ -37,7 +37,6 @@ t_output output
 s_lparen (
 t_id z
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_end end

@@ -17,10 +17,8 @@ t_output output
 s_lparen (
 t_id x
 s_rparen )
-s_semi ;
 t_output output
 s_lparen (
 t_id y
 s_rparen )
-s_semi ;
 t_end end

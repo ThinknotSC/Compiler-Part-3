@@ -23,5 +23,4 @@ t_output output
 s_lparen (
 t_id first
 s_rparen )
-s_semi ;
 t_end end

@@ -18,7 +18,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_if if
@@ -32,13 +31,12 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_if if
 s_lparen (
 t_id name
-s_lt 
+s_lt <
 t_text world
 s_rparen )
 t_then then
@@ -46,7 +44,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_if if
@@ -60,7 +57,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_if if
@@ -74,7 +70,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_if if
@@ -88,7 +83,6 @@ t_output output
 s_lparen (
 t_id name
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_end end

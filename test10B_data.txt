@@ -28,12 +28,10 @@ t_output output
 s_lparen (
 t_id first
 s_rparen )
-s_semi ;
 t_output output
 s_lparen (
 t_id last
 s_rparen )
-s_semi ;
 t_end end
 t_if if
 t_end end
