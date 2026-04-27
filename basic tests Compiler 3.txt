@@ -137,8 +137,6 @@ Declare integer x
 
 8- logical errors
 
-????????????????????????????????????????????????????????????
-TODO FINISH THESE- already in claude, just paste.
 9- concatenation 
  9.1) Test 9A- true 
 	Declare string name
@@ -189,12 +187,9 @@ TODO FINISH THESE- already in claude, just paste.
 	    Output name
 	Expected output: 5
 	                 hello
-11- Edge cases
- 11.1) Test 11A- and with true and false (should be false?)
-	Declare integer x
-	Assign x = 5
-	If (x == 5 and x != 5) then
-	    Output x
-	End if
-	Expected output: nothing ← and requires BOTH true
+11- regular relational operations with ints
+
+12- 
+	test A - if inside while loop
+	test B- while inside if
  
