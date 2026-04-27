@@ -802,8 +802,8 @@ bool isOperator(string lex) {
 }
 
 int main(){
-	ifstream source("test5A_data.txt");
-	ifstream symbols("test5A_vars.txt");
+	ifstream source("test11E_data.txt");
+	ifstream symbols("test11_vars.txt");
 	if (!source || !symbols) {
         cout << "One or more files not found" << endl;
         exit(-1);

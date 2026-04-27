@@ -23,7 +23,7 @@ t_then then
 t_while while
 s_lparen (
 t_id y
-s_lt 
+s_lt <
 t_number 3
 s_rparen )
 t_loop loop

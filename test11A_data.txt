@@ -7,7 +7,7 @@ s_semi ;
 t_main main
 t_id x
 s_assign =
-t_number 5
+t_number 10
 s_semi ;
 t_id y
 s_assign =
@@ -16,7 +16,7 @@ s_semi ;
 t_if if
 s_lparen (
 t_id x
-s_le <=
+s_gt >
 t_id y
 s_rparen )
 t_then then
